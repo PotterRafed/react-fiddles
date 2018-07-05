@@ -1,10 +1,8 @@
-#Draw Nine - React Game
+## Draw Nine - React Game
 
 For learning purposes...
 
 Install npm: `npm i`
-
-Build: `npm build`
 
 Run: `npm start` 
 
