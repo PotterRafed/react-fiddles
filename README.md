@@ -1,15 +1,11 @@
-#Small React Projects
+#Draw Nine - React Game
 
 For learning purposes...
 
-Edit `webpack.config.js` and change `entry: './src/github-usercards/main.jsx'` to point to whichever fiddle you want torun
-
 Install npm: `npm i`
 
-Build:  
-`npm build`
+Build: `npm build`
 
-Run dev:  
-`npm start` 
+Run: `npm start` 
 
-This will run on `http://localhost:8080/`
+This will start your default browser in `http://localhost:8080/`

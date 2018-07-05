@@ -1,4 +1,5 @@
 let React = require('react');
+let _ = require('lodash');
 
 const Numbers = (props) => {
 
@@ -28,4 +29,4 @@ const Numbers = (props) => {
 };
 Numbers.numbersList = _.range(1, 10);
 
-module.export = Numbers;
+module.exports = Numbers;

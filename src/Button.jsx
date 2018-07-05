@@ -1,6 +1,4 @@
-
 let React = require('react');
-
 
 const Button = (props) => {
 
@@ -12,14 +10,14 @@ const Button = (props) => {
                 <button className="btn btn-success btn"
                         onClick={props.acceptAnswer} >
                     <i className="fa fa-check"></i>
-                </button>
+                </button>;
             break;
         case false:
             button =
                 <button className="btn btn-danger btn"
                         onClick={props.clearAnswer} >
                     <i className="fa fa-times"></i>
-                </button>
+                </button>;
             break;
         default:
             button =
@@ -27,7 +25,7 @@ const Button = (props) => {
                         className="btn btn-primary btn"
                         disabled={props.selectedNums.length === 0}>
                     =
-                </button>
+                </button>;
     }
 
     return (
@@ -44,4 +42,4 @@ const Button = (props) => {
     );
 };
 
-module.export = Button;
+module.exports = Button;

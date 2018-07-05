@@ -2,7 +2,7 @@ var webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    entry: './src/github-usercards/main.jsx',
+    entry: './src/main.jsx',
     output: {
         // Output the bundled file.
         path: __dirname + '/dist',
@@ -21,7 +21,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "index.html",
+            template: "public/index.html",
             filename: "index.html"
         })
     ],

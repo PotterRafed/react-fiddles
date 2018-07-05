@@ -1,4 +1,3 @@
-
 let React = require('react');
 
 const Answer = (props) => {
@@ -11,4 +10,4 @@ const Answer = (props) => {
     );
 };
 
-module.export = Answer;
+module.exports = Answer;

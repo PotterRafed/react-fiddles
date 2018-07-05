@@ -1,4 +1,12 @@
 let React = require('react');
+let Button = require('./Button.jsx');
+let Answer = require('./Answer.jsx');
+let Numbers = require('./Numbers.jsx');
+let Stars = require('./Stars.jsx');
+let Timer = require('./Timer.jsx');
+let GameOver = require('./GameOver.jsx');
+let _ = require('lodash');
+
 
 let possibleCombinationSum = function(arr, n) {
     if (arr.indexOf(n) >= 0) { return true; }
@@ -28,10 +36,29 @@ class Game extends React.Component {
         numberOfStars: Game.randomNumber(),
         answerIsCorrect: null,
         refreshLeft:  5,
-        doneStatus: null
+        doneStatus: null,
+        secondsLeft: 30
     });
 
-    state = Game.initialState();
+    constructor() {
+        super();
+        this.state = Game.initialState();
+        this.state.intervalId = this.startTimer();
+    }
+
+    countDown = () => {
+        this.setState(prevState => ({
+            secondsLeft: prevState.secondsLeft - 1
+        }), this.updateDoneStatus);
+    };
+
+    stopTimer = (id) => {
+        clearInterval(id);
+    };
+
+    startTimer = () => {
+        return setInterval(this.countDown, 1000)
+    };
 
     selectNumber = (clickedNumber) => {
         if (this.state.selectedNums.indexOf(clickedNumber) < 0 &&
@@ -73,7 +100,11 @@ class Game extends React.Component {
         }), this.updateDoneStatus);
     };
 
-    resetGame = () => this.setState(Game.initialState());
+    resetGame = () => {
+        let newState = Game.initialState();
+        newState.intervalId = this.startTimer();
+        this.setState(newState)
+    };
 
     refresh = () => {
         if (this.state.refreshLeft === 0) {return;}
@@ -88,10 +119,16 @@ class Game extends React.Component {
     updateDoneStatus = () => {
         this.setState(prevState => {
             if (prevState.usedNums.length === 9) {
-                return {doneStatus: "You Won!"};
+                this.stopTimer(this.state.intervalId);
+                return {doneStatus: "CONGRATULATIONS! You Won!"};
             }
             if (prevState.refreshLeft === 0 && !this.possibleSolutions(prevState)) {
-                return { doneStatus: "Game Over!"};
+                this.stopTimer(this.state.intervalId);
+                return { doneStatus: "Game Over! You ran out of solutions"};
+            }
+            if (prevState.secondsLeft <= 0) {
+                this.stopTimer(this.state.intervalId);
+                return { doneStatus: "Game Over! Time ran out!"};
             }
         });
     };
@@ -101,6 +138,7 @@ class Game extends React.Component {
         const possibleNums = _.range(1, 10).filter(number =>
             usedNums.indexOf(number) === -1
         );
+        // console.log(possibleNums, numberOfStars);
         return possibleCombinationSum(possibleNums, numberOfStars);
     };
 
@@ -112,36 +150,40 @@ class Game extends React.Component {
             answerIsCorrect,
             usedNums,
             refreshLeft,
-            doneStatus
+            doneStatus,
+            secondsLeft
         } = this.state;
 
         return (
             <div className="container">
-                <h3>Play Nine</h3>
+                <h3>Draw Nine</h3>
                 <hr/>
                 <div className="row">
 
-                    <Stars numberOfStars={numberOfStars}
-                    />
+                    {!doneStatus && <Stars numberOfStars={numberOfStars}
+                    />}
 
-                    <Button selectedNums={selectedNums}
-                            numberOfStars={numberOfStars}
-                            checkAnswer={this.checkAnswer}
-                            answerIsCorrect={answerIsCorrect}
-                            acceptAnswer={this.acceptAnswer}
-                            refreshLeft={refreshLeft}
-                            refresh={this.refresh}
-                            clearAnswer={this.clearAnswer}
-                    />
-                    <Answer selectedNums={selectedNums}
-                            removeNumber={this.removeNumber}
-                    />
+                    {!doneStatus && <Button selectedNums={selectedNums}
+                                            numberOfStars={numberOfStars}
+                                            checkAnswer={this.checkAnswer}
+                                            answerIsCorrect={answerIsCorrect}
+                                            acceptAnswer={this.acceptAnswer}
+                                            refreshLeft={refreshLeft}
+                                            refresh={this.refresh}
+                                            clearAnswer={this.clearAnswer}
+                    />}
+                    {!doneStatus && <Answer selectedNums={selectedNums}
+                                            removeNumber={this.removeNumber}
+                    /> }
                 </div>
                 <br />
 
                 {doneStatus ?
                     <GameOver doneStatus={doneStatus}
                               resetGame={this.resetGame}
+                              usedNums={usedNums}
+                              secondsLeft={secondsLeft}
+                              refreshLeft={refreshLeft}
                     /> :
 
                     <Numbers selectedNums={selectedNums}
@@ -149,9 +191,13 @@ class Game extends React.Component {
                              usedNums={usedNums}
                     />
                 }
+                <br /><br />
+                {!doneStatus && <Timer secondsLeft={secondsLeft}
+                />}
+
             </div>
         );
     }
 }
 
-module.export = Game;
+module.exports = Game;

@@ -1,4 +1,5 @@
 let React = require('react');
+let _ = require('lodash');
 
 const Stars = (props) => {
 
@@ -11,4 +12,4 @@ const Stars = (props) => {
     );
 };
 
-module.export = Stars;
+module.exports = Stars;
